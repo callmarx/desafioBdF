@@ -4,10 +4,15 @@ class MarsProbe
     @x_max = x_max
     @y_max = y_max
     @wind_rose = ['N', 'E', 'S', 'W']
+    @errors = []
   end 
 
   def start(x:, y:, direction:)
-    if set_point(x, y)
+    if !@wind_rose.include? direction
+      @errors << "#{direction} not included in #{@wind_rose}"
+      puts @errors.last
+      false
+    elsif set_point(x, y)
       @x, @y = x, y
       @direction = direction
       true
@@ -16,8 +21,17 @@ class MarsProbe
     end
   end
 
-  # pressupõe que será chamada depois de #start
   def proceed_commands(commands_string:)
+    if commands_string.match /[^MLR]/
+      @errors << "Allowed only 'M', 'L' or 'R' in commands string"
+      puts @errors.last
+      return false
+    end
+    if !@x or !@y or !@direction
+      @errors << "Need to set start position"
+      puts @errors.last
+      return false
+    end
     commands_string.each_char do |ch|
       case ch
       when 'M'
@@ -28,15 +42,22 @@ class MarsProbe
         right_rotate
       end
     end
+    true
   end
 
   def get_status
     "#{@x}#{@y} #{@direction}"
   end
 
+  def get_errors
+    @errors
+  end
+
   private
     def set_point(x, y)
       if x < 0 or y < 0 or x > @x_max or y > @y_max
+        @errors << "(#{x}, #{y}) is out of limit"
+        puts @errors.last
         false
       else
         @x, @y = x, y
