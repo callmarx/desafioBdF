@@ -1,4 +1,4 @@
-class SondaMarte
+class MarsProbe
 
   def initialize(x_max, y_max)
     @x_max = x_max
