@@ -1,14 +1,18 @@
 class MarsProbe
 
-  def initialize(x_max, y_max)
+  def initialize(x_max:, y_max:)
     @x_max = x_max
     @y_max = y_max
     @wind_rose = ['N', 'E', 'S', 'W']
-    @error = []
+    @errors = []
   end 
 
-  def start(x, y, direction)
-    if set_point(x, y)
+  def start(x:, y:, direction:)
+    if !@wind_rose.include? direction
+      @errors << "#{direction} not included in #{@wind_rose}"
+      puts @errors.last
+      false
+    elsif set_point(x, y)
       @x, @y = x, y
       @direction = direction
       true
@@ -17,30 +21,43 @@ class MarsProbe
     end
   end
 
-  def proceed_command(command)
-    case command
-    when 'M'
-      move
-    when 'L'
-      left_rotate
-    when 'R'
-      right_rotate
+  def proceed_commands(commands_string:)
+    if commands_string.match /[^MLR]/
+      @errors << "Allowed only 'M', 'L' or 'R' in commands string"
+      puts @errors.last
+      return false
     end
-    get_status
+    if !@x or !@y or !@direction
+      @errors << "Need to set start position"
+      puts @errors.last
+      return false
+    end
+    commands_string.each_char do |ch|
+      case ch
+      when 'M'
+        move
+      when 'L'
+        left_rotate
+      when 'R'
+        right_rotate
+      end
+    end
+    true
   end
 
   def get_status
-    [@x, @y, @direction]
+    "#{@x}#{@y} #{@direction}"
   end
 
-  def get_error
-    @error
+  def get_errors
+    @errors
   end
 
   private
     def set_point(x, y)
       if x < 0 or y < 0 or x > @x_max or y > @y_max
-        @error << ["(#{x}, #{y}) is out of limit"]
+        @errors << "(#{x}, #{y}) is out of limit"
+        puts @errors.last
         false
       else
         @x, @y = x, y
