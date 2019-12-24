@@ -10,11 +10,12 @@ class MarsProbe
   def start(x:, y:, direction:)
     if !@wind_rose.include? direction
       @errors << "#{direction} not included in #{@wind_rose}"
-      puts @errors.last
+      puts "ERROR:: #{@errors.last}"
       false
     elsif set_point(x, y)
       @x, @y = x, y
       @direction = direction
+      puts "DEBUG:: start on #{get_status}"
       true
     else
       false
@@ -24,12 +25,12 @@ class MarsProbe
   def proceed_commands(commands_string:)
     if commands_string.match /[^MLR]/
       @errors << "Allowed only 'M', 'L' or 'R' in commands string"
-      puts @errors.last
+      puts "ERROR:: #{@errors.last}"
       return false
     end
     if !@x or !@y or !@direction
       @errors << "Need to set start position"
-      puts @errors.last
+      puts "ERROR:: #{@errors.last}"
       return false
     end
     commands_string.each_char do |ch|
@@ -46,7 +47,7 @@ class MarsProbe
   end
 
   def get_status
-    "#{@x}#{@y} #{@direction}"
+    "#{@x} #{@y} #{@direction}"
   end
 
   def get_errors
@@ -56,11 +57,12 @@ class MarsProbe
   private
     def set_point(x, y)
       if x < 0 or y < 0 or x > @x_max or y > @y_max
-        @errors << "(#{x}, #{y}) is out of limit"
-        puts @errors.last
+        @errors << "(#{x}, #{y}) is out of limit! Current status = #{get_status}"
+        puts "ERROR:: #{@errors.last}"
         false
       else
         @x, @y = x, y
+        puts "DEBUG:: move to: #{get_status}"
         true
       end
     end
@@ -80,9 +82,11 @@ class MarsProbe
 
     def left_rotate
       @direction = @wind_rose[@wind_rose.index(@direction) - 1]
+      puts "DEBUG:: change direction to: #{@direction}"
     end
 
     def right_rotate
       @direction = @wind_rose[(@wind_rose.index(@direction) + 1) % @wind_rose.length]
+      puts "DEBUG:: change direction to: #{@direction}"
     end
 end

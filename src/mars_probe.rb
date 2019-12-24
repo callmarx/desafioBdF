@@ -31,7 +31,7 @@ class MarsProbe
   end
 
   def get_status
-    "#{@x}#{@y} #{@direction}"
+    "#{@x} #{@y} #{@direction}"
   end
 
   private
