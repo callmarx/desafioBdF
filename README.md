@@ -23,5 +23,19 @@ movimentação. Sendo assim, foi trabalhado com o seguinte limite do plano carte
 ```
 Onde ```x_max``` e ```y_max``` são os valores obtidos da primeira linha da entrada.
 
-**OBS:** Se uma movimentação gerar um ponto para além do limite da malha, será devolvido a última
-posição válida mais o caracter ```@```, na mesma linha à saída do programa.
+**OBS:** Se uma movimentação gerar um ponto para além do limite da malha, será mantido o ponto
+anterior, do qual poderá ser impresso na saída caso não haja movimentações válidas seguintes.
+
+## Linguagem, ambiente e instruções de execução
+O teste foi desenvolvido em Ruby 2.6.5 e ambiente Linux. As entradas e saídas estão em arquivo
+texto.
+
+Para executar basta ter o Ruby instalado e dentro da pasta do projeto utilizar:
+```
+ruby src/main.rb tmp/input_example2.txt
+```
+  A saída será salva no formato ```./tmp/<timestamp>_output.txt```
+
+A resolução do problema em si esta mais concentrada no arquivo [mars_probe.rb](./src/mars_probe.rb).
+Mesmo tratando-se de um problema procedural, foi optado por uso de classe apenas para demonstrar um
+pouco do conhecimento em Orientação a Objetos ao avaliador.
