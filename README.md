@@ -8,9 +8,9 @@ Trata-se de movimentações sobre o eixo cartesiano (x, y). As direções **N**,
 **W** da Rosa dos Ventos, correspondem as incrementações de ponto-a-ponto sobre o plano, ou seja,
 dado o ponto inicial (x,y), o ponto resultante de:
   - Mover-se para N (Norte) = (x, y+1)
-  - Mover-se para E (Oeste) = (x+1, y)
+  - Mover-se para E (Leste) = (x+1, y)
   - Mover-se para S (Sul) = (x, y-1)
-  - Mover-se para W (leste) = (x-1, y)
+  - Mover-se para W (Oeste) = (x-1, y)
 
 
 Como o ponto (0, 0) foi definido como *"no canto inferior esquerdo"*, subentende-se que não haverá
